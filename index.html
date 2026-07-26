@@ -475,22 +475,121 @@ img { max-width: 100%; display: block; }
 /* ============================================
    SKILLS SECTION
    ============================================ */
-.skills-grid { display: block; max-width: 900px; }
+.skills-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 3.5rem; 
+  align-items: center; 
+  max-width: 1100px; 
+}
+@media (max-width: 900px) { 
+  .skills-grid { grid-template-columns: 1fr; gap: 2.5rem; } 
+}
 .skills h2 { font-size: clamp(2.8rem, 7vw, 5.2rem); display: flex; align-items: center; gap: 0.6rem; }
 .skills h2 .star { color: var(--orange); font-size: 0.6em; }
-.skill-list { margin: 1.8rem 0 0; columns: 3; column-gap: 1.6rem; }
+.skill-cat-title {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.skill-cat-title::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.skill-list { margin: 0.8rem 0 0; columns: 2; column-gap: 1.5rem; }
 @media (max-width: 520px) { .skill-list { columns: 1; } }
 .skill-list li {
-  break-inside: avoid; padding: 0.6rem 0;
-  font-size: 1rem; display: flex; gap: 0.6rem;
+  break-inside: avoid; padding: 0.5rem 0;
+  font-size: 0.96rem; display: flex; gap: 0.6rem;
   border-bottom: 1px solid var(--line);
+  color: rgba(255,255,255,0.85);
 }
 .skill-list li::before { content: '\2014'; color: var(--orange); }
-.skills-photo {
-  width: 100%; max-width: 380px; margin: 0 auto;
-  aspect-ratio: 4/5; overflow: hidden; border-radius: 4px;
+
+/* ============================================
+   INTERACTIVE 3D ICON CLOUD
+   ============================================ */
+.icon-cloud-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
-.skills-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
+.icon-cloud-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+}
+.icon-cloud-container:active {
+  cursor: grabbing;
+}
+@media (max-width: 500px) {
+  .icon-cloud-container { height: 340px; max-width: 340px; }
+}
+.icon-cloud-sphere {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+.icon-cloud-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  margin-top: -26px;
+  margin-left: -26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  will-change: transform, opacity;
+}
+.icon-cloud-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--orange);
+  box-shadow: 0 0 25px rgba(255, 87, 34, 0.5);
+}
+.icon-cloud-item img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+  pointer-events: none;
+}
+.cloud-caption {
+  margin-top: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+}
 
 /* ============================================
    PROJECTS SECTION (Dark)
@@ -873,27 +972,41 @@ img { max-width: 100%; display: block; }
 <section class="section skills" id="skills">
   <div class="skills-grid">
     <div data-aos="fade-right" data-aos-duration="800">
-      <div class="eyebrow">Toolkit</div>
-      <h2><span class="star">&#10033;</span> Skills</h2>
-      <ul class="skill-list">
-        <li>Brand Identity</li>
-        <li>UI / UX Design</li>
-        <li>Figma</li>
-        <li>Adobe Creative Suite</li>
-        <li>Campaign Design</li>
-        <li>Content Strategy</li>
-        <li>Motion / Animation</li>
-        <li>Prototyping</li>
-        <li>Typography Systems</li>
-        <li>Website development</li>
-        <li>Languages (Python, Java, C)</li>
-        <li>Audio Editing</li>
-        <li>Songs writing</li>
-        <li>SaaS Animation</li>
-        <li>Content Creator</li>
-      </ul>
+      <div class="eyebrow">Toolkit & Apps</div>
+      <h2><span class="star">&#10033;</span> Skills & Tech</h2>
+      <p class="work-desc" style="margin-bottom: 1.5rem;">A versatile stack combining industry-standard creative software for high-end video editing and VFX, alongside robust engineering tools for building scalable web apps and products.</p>
+      
+      <div class="skill-category">
+        <h3 class="skill-cat-title">Creative & Video Production</h3>
+        <ul class="skill-list" style="margin-bottom: 1.5rem;">
+          <li>DaVinci Resolve</li>
+          <li>Adobe Creative Suite (Ps, Ae, Pr, Ai)</li>
+          <li>Audio Editing & Mixing</li>
+          <li>Motion / VFX & Animation</li>
+          <li>UI / UX Design & Figma</li>
+          <li>Content Strategy & Scripting</li>
+        </ul>
+      </div>
+
+      <div class="skill-category">
+        <h3 class="skill-cat-title">Engineering & Development</h3>
+        <ul class="skill-list">
+          <li>TypeScript & JavaScript</li>
+          <li>React & Next.js</li>
+          <li>Node.js & Express</li>
+          <li>HTML5 & CSS3 / Tailwind</li>
+          <li>Python, Java, Dart</li>
+          <li>Docker, AWS & Cloud Architecture</li>
+        </ul>
+      </div>
     </div>
 
+    <div class="icon-cloud-col" data-aos="fade-left" data-aos-duration="1000">
+      <div class="icon-cloud-container" id="iconCloudContainer">
+        <div class="icon-cloud-sphere" id="iconCloudSphere"></div>
+      </div>
+      <p class="cloud-caption">&#10024; Hover or drag to rotate 3D interactive icon cloud</p>
+    </div>
   </div>
 </section>
 
@@ -1330,6 +1443,118 @@ img { max-width: 100%; display: block; }
     });
   });
 
+  /* ========== 3D INTERACTIVE ICON CLOUD ========== */
+  function initIconCloud() {
+    const container = document.getElementById('iconCloudContainer');
+    const sphere = document.getElementById('iconCloudSphere');
+    if (!container || !sphere) return;
+
+    const slugs = [
+      "davinciresolve", "adobephotoshop", "adobeaftereffects", "adobepremierepro", "adobeillustrator", "adobecreativecloud",
+      "typescript", "javascript", "python", "dart", "java", "react", "flutter", "android",
+      "html5", "css3", "nodedotjs", "express", "nextdotjs", "prisma", "amazonaws", "postgresql",
+      "firebase", "vercel", "docker", "git", "github", "visualstudiocode", "figma", "tailwindcss"
+    ];
+
+    const isMobile = window.innerWidth < 600;
+    const radius = isMobile ? 125 : 170;
+    const items = [];
+    const count = slugs.length;
+
+    for (let i = 0; i < count; i++) {
+      const phi = Math.acos(-1 + (2 * i + 1) / count);
+      const theta = Math.sqrt(count * Math.PI) * phi;
+      
+      const x = radius * Math.cos(theta) * Math.sin(phi);
+      const y = radius * Math.sin(theta) * Math.sin(phi);
+      const z = radius * Math.cos(phi);
+
+      const el = document.createElement('div');
+      el.className = 'icon-cloud-item';
+      el.innerHTML = `<img src="https://cdn.simpleicons.org/${slugs[i]}/white" alt="${slugs[i]}" loading="lazy" />`;
+      sphere.appendChild(el);
+
+      items.push({ el, x, y, z });
+    }
+
+    let rotX = 0;
+    let rotY = 0;
+    let targetSpeedX = 0.003;
+    let targetSpeedY = 0.003;
+    let speedX = 0.003;
+    let speedY = 0.003;
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const mouseX = e.clientX - centerX;
+      const mouseY = e.clientY - centerY;
+      
+      targetSpeedY = (mouseX / (rect.width / 2)) * 0.015;
+      targetSpeedX = -(mouseY / (rect.height / 2)) * 0.015;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      targetSpeedX = 0.003;
+      targetSpeedY = 0.003;
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    container.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - touchStartX;
+        const deltaY = e.touches[0].clientY - touchStartY;
+        targetSpeedY = (deltaX / 100) * 0.02;
+        targetSpeedX = -(deltaY / 100) * 0.02;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    function animate() {
+      speedX += (targetSpeedX - speedX) * 0.05;
+      speedY += (targetSpeedY - speedY) * 0.05;
+
+      rotX += speedX;
+      rotY += speedY;
+
+      const sinX = Math.sin(rotX), cosX = Math.cos(rotX);
+      const sinY = Math.sin(rotY), cosY = Math.cos(rotY);
+
+      for (let i = 0; i < count; i++) {
+        const item = items[i];
+        const x1 = item.x * cosY + item.z * sinY;
+        const y1 = item.y;
+        const z1 = -item.x * sinY + item.z * cosY;
+
+        const x2 = x1;
+        const y2 = y1 * cosX - z1 * sinX;
+        const z2 = y1 * sinX + z1 * cosX;
+
+        const scale = (z2 + 400) / 400;
+        const opacity = Math.max(0.25, Math.min(1, (z2 + radius) / (2 * radius) * 0.85 + 0.15));
+        const zIndex = Math.round(z2 + 500);
+
+        item.el.style.transform = `translate3d(${x2}px, ${y2}px, 0px) scale(${scale})`;
+        item.el.style.opacity = opacity;
+        item.el.style.zIndex = zIndex;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
+  initIconCloud();
 
 })();
 </script>
