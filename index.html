@@ -129,42 +129,17 @@ img { max-width: 100%; display: block; }
 }
 .preloader.done .preloader-center { opacity: 0; transform: scale(0.92); }
 
-.preloader-hello-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4.5rem;
-  width: 100%;
-  overflow: visible;
-}
-.greeting-item {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-family: var(--font-body);
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  font-weight: 600;
+.preloader-hello {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-style: italic;
   color: var(--white);
-  white-space: nowrap;
-  letter-spacing: -0.02em;
-  will-change: transform, opacity;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s 0.2s ease forwards;
 }
-.greeting-item-initial {
-  animation: greetingInit 0.4s ease-out forwards;
-}
-@keyframes greetingInit {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-.greeting-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 16px var(--orange);
-  flex-shrink: 0;
+@keyframes fadeInUp {
+  to { opacity: 0.9; transform: translateY(0); }
 }
 .preloader-counter {
   font-family: var(--font-body);
@@ -943,11 +918,12 @@ img { max-width: 100%; display: block; }
 }
 .skills h2 { font-size: clamp(2.8rem, 7vw, 5.2rem); display: flex; align-items: center; gap: 0.6rem; }
 .skills h2 .star { color: var(--orange); font-size: 0.6em; }
+.skills .work-desc { color: rgba(0, 0, 0, 0.75); }
 .skill-cat-title {
   font-family: var(--font-body);
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--white);
+  color: var(--dark);
   margin-top: 1.2rem;
   margin-bottom: 0.5rem;
   display: flex;
@@ -967,7 +943,7 @@ img { max-width: 100%; display: block; }
   break-inside: avoid; padding: 0.5rem 0;
   font-size: 0.96rem; display: flex; gap: 0.6rem;
   border-bottom: 1px solid var(--line);
-  color: rgba(255,255,255,0.85);
+  color: rgba(0, 0, 0, 0.85);
 }
 .skill-list li::before { content: '\2014'; color: var(--orange); }
 
@@ -977,16 +953,17 @@ img { max-width: 100%; display: block; }
 .icon-cloud-col {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   position: relative;
+  width: 100%;
 }
 .icon-cloud-container {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  height: 440px;
-  margin: 0 auto;
+  max-width: 460px;
+  height: 460px;
+  margin: 0 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -997,7 +974,8 @@ img { max-width: 100%; display: block; }
   cursor: grabbing;
 }
 @media (max-width: 500px) {
-  .icon-cloud-container { height: 340px; max-width: 340px; }
+  .icon-cloud-container { height: 340px; max-width: 340px; margin: 0 auto; }
+  .icon-cloud-col { align-items: center; }
 }
 .icon-cloud-sphere {
   position: relative;
@@ -1009,25 +987,26 @@ img { max-width: 100%; display: block; }
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 52px;
-  height: 52px;
-  margin-top: -26px;
-  margin-left: -26px;
+  width: 54px;
+  height: 54px;
+  margin-top: -27px;
+  margin-left: -27px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
 .icon-cloud-item:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #ffffff;
   border-color: var(--orange);
-  box-shadow: 0 0 25px rgba(255, 87, 34, 0.5);
+  box-shadow: 0 14px 30px rgba(230, 57, 70, 0.25);
+  transform: scale(1.15) !important;
+  z-index: 100 !important;
 }
 .icon-cloud-item img {
   width: 30px;
@@ -1037,14 +1016,7 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
 }
 .cloud-caption {
-  margin-top: 0.5rem;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.45);
-  text-align: center;
+  display: none;
 }
 
 /* ============================================
@@ -1229,9 +1201,7 @@ img { max-width: 100%; display: block; }
     <div class="preloader-orb" style="width:180px;height:180px;bottom:12%;left:8%;"></div>
   </div>
   <div class="preloader-center">
-    <div class="preloader-hello-wrap" id="helloWrap">
-      <div class="greeting-item greeting-item-initial"><div class="greeting-dot"></div><span>Hello</span></div>
-    </div>
+    <div class="preloader-hello">Hello</div>
     <div class="preloader-counter" id="preloaderCount">0</div>
     <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
   </div>
@@ -1283,7 +1253,6 @@ img { max-width: 100%; display: block; }
           <!-- JS will render option wheel items here -->
         </div>
       </div>
-      <p class="wheel-caption">&#10024; Scroll, drag, or click to navigate</p>
     </div>
   </div>
 </section>
@@ -1453,7 +1422,7 @@ img { max-width: 100%; display: block; }
   <div class="skills-grid">
     <div data-aos="fade-right" data-aos-duration="800">
       <div class="eyebrow">Toolkit & Apps</div>
-      <h2><span class="star">&#10033;</span> Skills & Tech</h2>
+      <h2><span class="star">&#10033;</span> Skills</h2>
       <p class="work-desc" style="margin-bottom: 1.5rem;">A versatile stack combining industry-standard creative software for high-end video editing and VFX, alongside robust engineering tools for building scalable web apps and products.</p>
       
       <div class="skill-category">
@@ -1485,7 +1454,6 @@ img { max-width: 100%; display: block; }
       <div class="icon-cloud-container" id="iconCloudContainer">
         <div class="icon-cloud-sphere" id="iconCloudSphere"></div>
       </div>
-      <p class="cloud-caption">&#10024; Hover or drag to rotate 3D interactive icon cloud</p>
     </div>
   </div>
 </section>
@@ -1665,52 +1633,16 @@ img { max-width: 100%; display: block; }
   let count = 0;
   document.body.style.overflow = 'hidden';
 
-  const greetings = [
-    { text: "Hello", language: "English" },
-    { text: "こんにちは", language: "Japanese" },
-    { text: "Bonjour", language: "French" },
-    { text: "Hola", language: "Spanish" },
-    { text: "안녕하세요", language: "Korean" },
-    { text: "Ciao", language: "Italian" },
-    { text: "Hallo", language: "German" },
-    { text: "你好", language: "Chinese" },
-    { text: "नमस्ते", language: "Hindi" },
-    { text: "Welcome", language: "English" }
-  ];
+  const greetings = ["Hello", "Hola", "Bonjour", "Hallo", "Ciao", "こんにちは", "你好", "नमस्ते"];
   let greetingIndex = 0;
-  const helloWrap = document.getElementById('helloWrap');
+  const helloEl = document.querySelector('.preloader-hello');
   
-  function showGreeting(index) {
-    const oldEl = helloWrap.firstElementChild;
-    if (oldEl) {
-      gsap.to(oldEl, {
-        y: -50,
-        opacity: 0,
-        duration: 0.2,
-        ease: "power2.inOut",
-        onComplete: () => oldEl.remove()
-      });
-    }
-    
-    const newEl = document.createElement('div');
-    newEl.className = 'greeting-item';
-    newEl.innerHTML = `<div class="greeting-dot"></div><span>${greetings[index].text}</span>`;
-    helloWrap.appendChild(newEl);
-    
-    gsap.fromTo(newEl, 
-      { y: 25, opacity: 0 }, 
-      { y: 0, opacity: 1, duration: 0.22, ease: "power2.out" }
-    );
-  }
-
   const greetingInt = setInterval(() => {
-    if (greetingIndex < greetings.length - 1) {
-      greetingIndex++;
-      showGreeting(greetingIndex);
-    } else {
-      clearInterval(greetingInt);
+    greetingIndex++;
+    if (greetingIndex < greetings.length) {
+      helloEl.textContent = greetings[greetingIndex];
     }
-  }, 300);
+  }, 500);
 
   const preInt = setInterval(() => {
     count += 1;
@@ -2189,15 +2121,6 @@ img { max-width: 100%; display: block; }
       }
       startLoop();
     }
-
-    rootEl.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-      const step = Math.max(-1, Math.min(1, delta / rowH));
-      applyTarget(target + step, false);
-      if (wheelTimer) clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(() => applyTarget(target, true), 140);
-    }, { passive: false });
 
     rootEl.addEventListener('pointerdown', (e) => {
       drag = { y: e.clientY, start: target, id: e.pointerId };
