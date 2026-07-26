@@ -344,11 +344,18 @@ img { max-width: 100%; display: block; }
 .toc-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 3rem; align-items: start; }
 @media (max-width: 900px) { .toc-grid { grid-template-columns: 1fr; } }
 .toc h2 { font-size: clamp(2.6rem, 6vw, 4.2rem); }
-.torn-card {
-  position: relative; background: var(--white);
-  padding: 2.6rem 2.4rem 2.2rem;
-  clip-path: polygon(0% 2%,4% 0%,12% 1.5%,20% 0%,29% 1.8%,38% 0.3%,47% 2%,56% 0%,66% 1.6%,75% 0.4%,85% 1.8%,93% 0.2%,100% 1.5%,100% 97%,95% 100%,88% 98.4%,80% 100%,71% 98.5%,62% 100%,53% 98%,44% 100%,35% 98.3%,26% 100%,17% 98.6%,9% 100%,3% 98.4%,0% 100%);
-  box-shadow: 0 24px 50px -20px rgba(0,0,0,0.25);
+/* ============================================
+   INTERACTIVE 3D OPTION WHEEL (TOC)
+   ============================================ */
+.option-wheel-card {
+  position: relative;
+  background: #161616;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem 1.5rem;
+  height: 420px;
+  box-shadow: 0 24px 50px -20px rgba(0,0,0,0.4);
+  overflow: hidden;
 }
 .tape {
   position: absolute; top: -16px; left: 38px;
@@ -356,20 +363,76 @@ img { max-width: 100%; display: block; }
   background: rgba(200,90,45,0.85);
   transform: rotate(-4deg);
   box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  z-index: 10;
 }
-.toc-list { margin: 1.4rem 0 0; }
-.toc-list li {
-  display: flex; align-items: baseline; gap: 0.8rem;
-  padding: 0.85rem 0; border-bottom: 1px solid var(--line);
-  font-size: 1.05rem; cursor: pointer;
-  transition: padding-left 0.3s ease, color 0.3s;
+.wheel-caption {
+  margin-top: 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: center;
 }
-.toc-list li:last-child { border-bottom: none; }
-.toc-list li:hover { padding-left: 0.5rem; color: var(--orange); }
-.toc-list .num { font-family: var(--font-body); font-weight: 600; font-size: 0.85rem; color: var(--orange); }
-.toc-list a { font-weight: 500; }
-.toc-list .glyph { margin-left: auto; color: var(--orange); transition: transform 0.3s; }
-.toc-list li:hover .glyph { transform: rotate(90deg) scale(1.2); }
+.option-wheel {
+  --ow-text-color: #777777;
+  --ow-active-color: #ffffff;
+  --ow-inset: 30px;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  outline: none;
+}
+.option-wheel--dragging {
+  cursor: grabbing;
+}
+.option-wheel__item {
+  position: absolute;
+  top: 50%;
+  left: var(--ow-inset);
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  line-height: 1;
+  font-weight: 300;
+  transform-origin: left center;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+  color: color-mix(in srgb, var(--ow-active-color) calc(var(--ow-p, 0) * 100%), var(--ow-text-color));
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: font-weight 0.2s, color 0.2s;
+}
+.option-wheel__item--selected {
+  font-weight: 700;
+  color: var(--orange) !important;
+}
+.option-wheel__item .num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--orange);
+  opacity: calc(0.3 + var(--ow-p, 0) * 0.7);
+}
+.option-wheel__item .glyph {
+  font-size: 1.1rem;
+  color: var(--orange);
+  opacity: var(--ow-p, 0);
+  transform: scale(calc(var(--ow-p, 0) * 1.3));
+  transition: opacity 0.2s, transform 0.2s;
+  margin-left: 0.5rem;
+}
+@media (max-width: 500px) {
+  .option-wheel { --ow-inset: 15px; }
+  .option-wheel-card { height: 360px; padding: 2rem 1rem; }
+}
 
 /* ============================================
    ABOUT SECTION
@@ -825,18 +888,13 @@ img { max-width: 100%; display: block; }
       <h2>Where<br>to look</h2>
     </div>
     <div data-aos="fade-up" data-aos-duration="900" data-aos-delay="100">
-      <div class="torn-card">
+      <div class="option-wheel-card">
         <div class="tape"></div>
-        <ul class="toc-list" id="tocList">
-          <li data-aos="fade-left" data-aos-delay="150"><span class="num">01</span><a href="#about">About</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="200"><span class="num">02</span><a href="#education">Education</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="250"><span class="num">03</span><a href="#work">Work Experience</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="300"><span class="num">04</span><a href="#skills">Skills</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="350"><span class="num">05</span><a href="#projects">Projects & Cases</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="400"><span class="num">06</span><a href="#certifications">Certifications</a><span class="glyph">&#10022;</span></li>
-          <li data-aos="fade-left" data-aos-delay="450"><span class="num">07</span><a href="#contact">Contact</a><span class="glyph">&#10022;</span></li>
-        </ul>
+        <div class="option-wheel" id="tocOptionWheel" role="listbox" tabIndex="0" aria-label="Option wheel">
+          <!-- JS will render option wheel items here -->
+        </div>
       </div>
+      <p class="wheel-caption">&#10024; Scroll, drag, or click to navigate</p>
     </div>
   </div>
 </section>
@@ -1555,6 +1613,214 @@ img { max-width: 100%; display: block; }
     animate();
   }
   initIconCloud();
+
+  /* ========== 3D INTERACTIVE OPTION WHEEL (TOC) ========== */
+  function initOptionWheel() {
+    const rootEl = document.getElementById('tocOptionWheel');
+    if (!rootEl) return;
+
+    const itemsData = [
+      { num: "01", label: "About", href: "#about" },
+      { num: "02", label: "Education", href: "#education" },
+      { num: "03", label: "Work Experience", href: "#work" },
+      { num: "04", label: "Skills & Tech", href: "#skills" },
+      { num: "05", label: "Projects & Cases", href: "#projects" },
+      { num: "06", label: "Certifications", href: "#certifications" },
+      { num: "07", label: "Contact", href: "#contact" }
+    ];
+
+    const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const isMobile = window.innerWidth < 600;
+    const fontSize = isMobile ? 1.7 : 2.2;
+    const spacing = 1.35;
+    const rowH = Math.max(fontSize * spacing * remPx, 1);
+    const curve = 1.1;
+    const tilt = 7;
+    const blur = 1.8;
+    const fade = 0.28;
+    const minOpacity = 0.15;
+    const smoothing = 180;
+    const count = itemsData.length;
+    const loop = true;
+
+    const audioCtx = typeof AudioContext !== 'undefined' ? new AudioContext() : (typeof webkitAudioContext !== 'undefined' ? new webkitAudioContext() : null);
+    let lastTick = 0;
+    function playTick() {
+      if (!audioCtx) return;
+      const now = performance.now();
+      if (now - lastTick < 70) return;
+      lastTick = now;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.025);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.025);
+      } catch(e) {}
+    }
+
+    const itemRefs = [];
+    itemsData.forEach((item, index) => {
+      const el = document.createElement('div');
+      el.className = 'option-wheel__item';
+      el.setAttribute('role', 'option');
+      el.innerHTML = `<span class="num">${item.num}</span><span>${item.label}</span><span class="glyph">&#10022;</span>`;
+      rootEl.appendChild(el);
+      itemRefs.push(el);
+
+      el.addEventListener('click', () => {
+        if (dragMoved) return;
+        let d = index - (((Math.round(target) % count) + count) % count);
+        if (loop && count > 1) {
+          if (d > count / 2) d -= count;
+          else if (d < -count / 2) d += count;
+        }
+        applyTarget(target + d, true);
+        
+        const targetSec = document.querySelector(item.href);
+        if (targetSec) {
+          if (typeof lenis !== 'undefined' && lenis) {
+            lenis.scrollTo(targetSec, { offset: 0, duration: 1.2 });
+          } else {
+            targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+
+    let pos = 0;
+    let target = 0;
+    let selectedIndex = 0;
+    let rafId = null;
+    let lastTime = 0;
+    let wheelTimer = null;
+    let drag = null;
+    let dragMoved = false;
+
+    function runFrame(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      const tau = Math.max(smoothing, 1) / 1000;
+      const k = 1 - Math.exp(-dt / tau);
+
+      let next = pos + (target - pos) * k;
+      const settled = Math.abs(target - next) < 0.001;
+      if (settled) next = target;
+      pos = next;
+
+      const tiltRad = (tilt * Math.PI) / 180;
+      const R = tiltRad > 0.0005 ? rowH / tiltRad : 0;
+
+      for (let i = 0; i < count; i++) {
+        const el = itemRefs[i];
+        if (!el) continue;
+        let d = i - next;
+        if (loop && count > 1) {
+          d = ((d % count) + count) % count;
+          if (d > count / 2) d -= count;
+        }
+        const dist = Math.abs(d);
+        let x = 0;
+        let y = d * rowH;
+        let rot = 0;
+        if (R > 0) {
+          const ang = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, d * tiltRad));
+          y = R * Math.sin(ang);
+          x = -R * (1 - Math.cos(ang)) * curve;
+          rot = (ang * 180) / Math.PI;
+        }
+        el.style.transform = `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
+        el.style.opacity = String(Math.max(minOpacity, 1 - dist * fade));
+        el.style.filter = blur > 0 ? `blur(${(dist * blur).toFixed(2)}px)` : 'none';
+        el.style.setProperty('--ow-p', Math.max(0, 1 - Math.min(dist, 1)).toFixed(4));
+      }
+
+      rafId = settled ? null : requestAnimationFrame(runFrame);
+    }
+
+    function startLoop() {
+      if (rafId != null) return;
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(runFrame);
+    }
+
+    function applyTarget(val, snap) {
+      let v = val;
+      if (!loop) v = Math.min(Math.max(v, 0), Math.max(count - 1, 0));
+      if (snap) v = Math.round(v);
+      target = v;
+      const idx = ((Math.round(v) % count) + count) % count;
+      if (idx !== selectedIndex) {
+        selectedIndex = idx;
+        itemRefs.forEach((el, i) => {
+          el.classList.toggle('option-wheel__item--selected', i === idx);
+          el.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+        });
+        playTick();
+      }
+      startLoop();
+    }
+
+    rootEl.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
+      const step = Math.max(-1, Math.min(1, delta / rowH));
+      applyTarget(target + step, false);
+      if (wheelTimer) clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(() => applyTarget(target, true), 140);
+    }, { passive: false });
+
+    rootEl.addEventListener('pointerdown', (e) => {
+      drag = { y: e.clientY, start: target, id: e.pointerId };
+      dragMoved = false;
+      rootEl.classList.add('option-wheel--dragging');
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dy = e.clientY - drag.y;
+      if (!dragMoved && Math.abs(dy) > 4) {
+        dragMoved = true;
+        try { rootEl.setPointerCapture(drag.id); } catch(err){}
+      }
+      if (dragMoved) {
+        applyTarget(drag.start - dy / rowH, false);
+      }
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (!drag) return;
+      drag = null;
+      rootEl.classList.remove('option-wheel--dragging');
+      if (dragMoved) applyTarget(target, true);
+    });
+    window.addEventListener('pointercancel', () => {
+      if (!drag) return;
+      drag = null;
+      rootEl.classList.remove('option-wheel--dragging');
+      if (dragMoved) applyTarget(target, true);
+    });
+
+    rootEl.addEventListener('keydown', (e) => {
+      let delta = null;
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') delta = -1;
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') delta = 1;
+      if (delta != null) {
+        e.preventDefault();
+        applyTarget(Math.round(target) + delta, true);
+      }
+    });
+
+    applyTarget(0, true);
+  }
+  initOptionWheel();
 
 })();
 </script>
