@@ -129,17 +129,42 @@ img { max-width: 100%; display: block; }
 }
 .preloader.done .preloader-center { opacity: 0; transform: scale(0.92); }
 
-.preloader-hello {
-  font-family: var(--font-serif);
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-style: italic;
-  color: var(--white);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s 0.2s ease forwards;
+.preloader-hello-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.5rem;
+  width: 100%;
+  overflow: visible;
 }
-@keyframes fadeInUp {
-  to { opacity: 0.9; transform: translateY(0); }
+.greeting-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-body);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 600;
+  color: var(--white);
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  will-change: transform, opacity;
+}
+.greeting-item-initial {
+  animation: greetingInit 0.4s ease-out forwards;
+}
+@keyframes greetingInit {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.greeting-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 16px var(--orange);
+  flex-shrink: 0;
 }
 .preloader-counter {
   font-family: var(--font-body);
@@ -653,7 +678,9 @@ img { max-width: 100%; display: block; }
     <div class="preloader-orb" style="width:180px;height:180px;bottom:12%;left:8%;"></div>
   </div>
   <div class="preloader-center">
-    <div class="preloader-hello">Hello</div>
+    <div class="preloader-hello-wrap" id="helloWrap">
+      <div class="greeting-item greeting-item-initial"><div class="greeting-dot"></div><span>Hello</span></div>
+    </div>
     <div class="preloader-counter" id="preloaderCount">0</div>
     <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
   </div>
@@ -1045,16 +1072,52 @@ img { max-width: 100%; display: block; }
   let count = 0;
   document.body.style.overflow = 'hidden';
 
-  const greetings = ["Hello", "Hola", "Bonjour", "Hallo", "Ciao", "こんにちは", "你好", "नमस्ते"];
+  const greetings = [
+    { text: "Hello", language: "English" },
+    { text: "こんにちは", language: "Japanese" },
+    { text: "Bonjour", language: "French" },
+    { text: "Hola", language: "Spanish" },
+    { text: "안녕하세요", language: "Korean" },
+    { text: "Ciao", language: "Italian" },
+    { text: "Hallo", language: "German" },
+    { text: "你好", language: "Chinese" },
+    { text: "नमस्ते", language: "Hindi" },
+    { text: "Welcome", language: "English" }
+  ];
   let greetingIndex = 0;
-  const helloEl = document.querySelector('.preloader-hello');
+  const helloWrap = document.getElementById('helloWrap');
   
-  const greetingInt = setInterval(() => {
-    greetingIndex++;
-    if (greetingIndex < greetings.length) {
-      helloEl.textContent = greetings[greetingIndex];
+  function showGreeting(index) {
+    const oldEl = helloWrap.firstElementChild;
+    if (oldEl) {
+      gsap.to(oldEl, {
+        y: -50,
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.inOut",
+        onComplete: () => oldEl.remove()
+      });
     }
-  }, 500);
+    
+    const newEl = document.createElement('div');
+    newEl.className = 'greeting-item';
+    newEl.innerHTML = `<div class="greeting-dot"></div><span>${greetings[index].text}</span>`;
+    helloWrap.appendChild(newEl);
+    
+    gsap.fromTo(newEl, 
+      { y: 25, opacity: 0 }, 
+      { y: 0, opacity: 1, duration: 0.22, ease: "power2.out" }
+    );
+  }
+
+  const greetingInt = setInterval(() => {
+    if (greetingIndex < greetings.length - 1) {
+      greetingIndex++;
+      showGreeting(greetingIndex);
+    } else {
+      clearInterval(greetingInt);
+    }
+  }, 300);
 
   const preInt = setInterval(() => {
     count += 1;
