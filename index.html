@@ -2283,21 +2283,17 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
 
     const unlockEvents = [
       'click', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 
-      'touchstart', 'touchend', 'touchcancel', 'keydown', 'keyup', 'keypress', 
-      'auxclick', 'dblclick', 'contextmenu', 'selectstart', 'selectionchange', 
-      'dragstart', 'dragend', 'focus', 'focusin', 'focusout', 'blur', 
-      'wheel', 'scroll', 'scrollend', 'pointermove', 'mousemove', 'touchmove', 
-      'mouseover', 'mouseenter', 'pointerover', 'pointerenter', 'mouseout', 
-      'mouseleave', 'pointerleave', 'pointerout', 'orientationchange', 
-      'deviceorientation', 'devicemotion', 'resize', 'visibilitychange', 
-      'transitionstart', 'transitionend', 'animationstart', 'animationend', 
-      'load', 'DOMContentLoaded', 'readystatechange'
+      'touchstart', 'touchend', 'touchcancel', 'keydown', 'keyup', 
+      'auxclick', 'dblclick', 'contextmenu', 'focus'
     ];
 
+    let resumePending = false;
     const unlockAudio = () => {
-      if (!audioCtx || audioUnlocked) return;
+      if (!audioCtx || audioUnlocked || resumePending) return;
       if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+        resumePending = true;
         audioCtx.resume().then(() => {
+          resumePending = false;
           if (audioCtx.state === 'running') {
             audioUnlocked = true;
             try {
@@ -2312,7 +2308,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
               document.removeEventListener(evt, unlockAudio, true);
             });
           }
-        }).catch(() => {});
+        }).catch(() => { resumePending = false; });
       } else if (audioCtx.state === 'running') {
         audioUnlocked = true;
         unlockEvents.forEach(evt => {
@@ -2405,15 +2401,19 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
       smoothWheel: true,
     });
 
-    lenis.on('scroll', () => {
-      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
-    });
-
-    function raf(time) {
-      lenis.raf(time);
+    if (typeof gsap !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0, 0);
+    } else {
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
   }
   // Init after a tick so libs load
   setTimeout(initLenis, 100);
@@ -2961,7 +2961,21 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
     container.addEventListener('touchend', handleTouchEnd);
     container.addEventListener('touchcancel', handleTouchEnd);
 
+    let isVisible = false;
+    let rafId = null;
+    const obs = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && !rafId) {
+        rafId = requestAnimationFrame(animate);
+      }
+    }, { threshold: 0.05 });
+    obs.observe(container);
+
     function animate() {
+      if (!isVisible || document.hidden) {
+        rafId = null;
+        return;
+      }
       speedX += (targetSpeedX - speedX) * 0.05;
       speedY += (targetSpeedY - speedY) * 0.05;
 
@@ -2990,10 +3004,10 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
         item.el.style.zIndex = zIndex;
       }
 
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
 
-    animate();
+    if (!rafId) rafId = requestAnimationFrame(animate);
   }
   initIconCloud();
 
@@ -3267,7 +3281,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
 
       const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
 
-      if (stillFar || document.hasFocus()) {
+      if (stillFar) {
         rafId = requestAnimationFrame(step);
       } else {
         running = false;
@@ -3455,11 +3469,11 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
         cursorSize: 100,
         isViscous: false,
         viscous: 30,
-        iterationsViscous: 10,
-        iterationsPoisson: 10,
+        iterationsViscous: 3,
+        iterationsPoisson: 3,
         dt: 0.014,
-        BFECC: true,
-        resolution: 0.35,
+        BFECC: false,
+        resolution: 0.25,
         isBounce: false,
         colors: ["#5227FF", "#FF9FFC", "#B497CF"],
         autoDemo: true,
@@ -3501,9 +3515,9 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
         }
         init(cont) {
           this.container = cont;
-          this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+          this.pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
           this.resize();
-          this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
           this.renderer.autoClear = false;
           this.renderer.setClearColor(new THREE.Color(0x000000), 0);
           this.renderer.setPixelRatio(this.pixelRatio);
@@ -4421,14 +4435,28 @@ void main() {
     gl.uniform1f(uLoc.uSaturation, 1.5);
 
     let startTime = performance.now();
+    let isVisible = false;
+    let rafId = null;
+    const obs = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && !rafId) {
+        rafId = requestAnimationFrame(render);
+      }
+    }, { threshold: 0.05 });
+    obs.observe(container);
+
     function render(now) {
-      requestAnimationFrame(render);
+      if (!isVisible || document.hidden) {
+        rafId = null;
+        return;
+      }
+      rafId = requestAnimationFrame(render);
       const t = (now - startTime) * 0.001;
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(uLoc.uTime, t);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
-    requestAnimationFrame(render);
+    if (!rafId) rafId = requestAnimationFrame(render);
   }
   initStrands();
 
