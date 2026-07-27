@@ -1675,12 +1675,18 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
   text-decoration: none; white-space: nowrap; text-transform: capitalize;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
   transform: scale(0); transform-origin: 100% 0%; opacity: 0;
-  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.bubble-pill:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
+.bubble-pill:hover { 
+  background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.35); color: #fff; 
+}
 .bubble-pill.active {
-  background: rgba(255, 255, 255, 0.16); border-color: rgba(255, 255, 255, 0.3);
-  color: #fff; font-weight: 700;
+  background: var(--orange); 
+  border-color: #ff8c5a;
+  color: #fff; 
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(200, 90, 45, 0.7), 0 4px 14px rgba(0,0,0,0.5);
+  margin-right: 6px;
 }
 @media (max-width: 600px) {
   .bubble-nav-fab { top: calc(1rem + env(safe-area-inset-top, 0px)); right: calc(1rem + env(safe-area-inset-right, 0px)); }
@@ -2695,16 +2701,28 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
       });
     });
 
-    const sections = ['#top', '#about', '#work', '#projects', '#contact'].map(id => document.querySelector(id)).filter(Boolean);
+    const sectionMap = {
+      'top': '#top',
+      'toc': '#top',
+      'about': '#about',
+      'education': '#about',
+      'work': '#work',
+      'skills': '#work',
+      'projects': '#projects',
+      'certifications': '#projects',
+      'contact': '#contact'
+    };
+    const allSections = Object.keys(sectionMap).map(id => document.getElementById(id)).filter(Boolean);
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          updateNav('#' + entry.target.id);
+          const targetNav = sectionMap[entry.target.id];
+          if (targetNav) updateNav(targetNav);
         }
       });
-    }, { threshold: 0.25, rootMargin: '-10% 0px -50% 0px' });
+    }, { threshold: 0, rootMargin: '-20% 0px -60% 0px' });
 
-    sections.forEach(sec => obs.observe(sec));
+    allSections.forEach(sec => obs.observe(sec));
     updateNav('#top');
 
     // Landing (hero) visible -> show top navbar, hide bubble quick-nav.
