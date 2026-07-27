@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shreyamdash.com/sitemap.xml
+Sitemap: https://shreyamdash.github.io/portfolio/sitemap.xml
