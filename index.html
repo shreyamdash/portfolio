@@ -1137,6 +1137,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 2.5rem;
   row-gap: 0;
+  align-items: stretch;
 }
 @media (max-width: 768px) { 
   .skill-list { grid-template-columns: 1fr; } 
@@ -1145,11 +1146,13 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
   padding: 0.65rem 0;
   font-size: 0.96rem; 
   display: flex; 
-  align-items: flex-start;
+  align-items: center;
   gap: 0.6rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   color: rgba(0, 0, 0, 0.85);
   line-height: 1.4;
+  height: 100%;
+  box-sizing: border-box;
 }
 .skill-list li::before { content: '\2014'; color: var(--orange); flex-shrink: 0; line-height: 1.4; }
 
@@ -1855,6 +1858,23 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
         </div>
       </div>
     </div>
+
+    <!-- University of the People -->
+    <div class="edu-row">
+      <div class="years mono">Sep 2026 &ndash; Sep 2028</div>
+      <div>
+        <h3>University of the People</h3>
+        <div style="font-weight: 700; margin-top: 0.2rem; font-size: 0.95rem;">Associate Degree in Business Administration, Business Administration and Management, General</div>
+        <p>An Associate Degree in Business Administration is a two-year, 60-credit undergraduate program. It provides foundational knowledge in core concepts like accounting, economics, marketing, and management. It is a popular, cost-effective option for entering the workforce quickly or preparing for a bachelor's degree.</p>
+        <div class="glass-pill-wrap">
+          <span class="glass-pill">Business Administration</span>
+          <span class="glass-pill">Strategic Management</span>
+          <span class="glass-pill">Marketing & Economics</span>
+          <span class="glass-pill">Financial Accounting</span>
+          <span class="glass-pill">Operations & Leadership</span>
+        </div>
+      </div>
+    </div>
     
     <!-- Y Combinator -->
     <div class="edu-row">
@@ -1951,7 +1971,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
     <div data-aos="fade-right" data-aos-duration="800">
       <div class="eyebrow">Toolkit & Apps</div>
       <h2><span class="star">&#10033;</span> Skills</h2>
-      <p class="work-desc" style="margin-bottom: 1.5rem;">A versatile stack combining industry-standard creative software for high-end video editing and VFX, alongside robust engineering tools for building scalable web apps and products.</p>
+      <p class="work-desc" style="margin-bottom: 1.5rem;">A versatile skill set combining industry-standard creative software for high-end video editing and VFX, robust engineering tools for scalable software development, and foundational business administration for strategic product growth.</p>
       
       <div class="skill-category">
         <h3 class="skill-cat-title">Creative & Video Production</h3>
@@ -1967,13 +1987,25 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
 
       <div class="skill-category">
         <h3 class="skill-cat-title">Engineering & Development</h3>
-        <ul class="skill-list">
+        <ul class="skill-list" style="margin-bottom: 1.5rem;">
           <li>TypeScript & JavaScript</li>
           <li>React & Next.js</li>
           <li>Node.js & Express</li>
           <li>HTML5 & CSS3 / Tailwind</li>
           <li>Python, Java, Dart</li>
           <li>Docker, AWS & Cloud Architecture</li>
+        </ul>
+      </div>
+
+      <div class="skill-category">
+        <h3 class="skill-cat-title">Business & Strategic Management</h3>
+        <ul class="skill-list">
+          <li>Business Administration & Operations</li>
+          <li>Strategic Management & Planning</li>
+          <li>Marketing Strategy & Economics</li>
+          <li>Financial Accounting & Analysis</li>
+          <li>Startup Ideation & Growth</li>
+          <li>Product Management & Leadership</li>
         </ul>
       </div>
     </div>
@@ -2835,7 +2867,14 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
       { name: "GitHub", url: "https://cdn.simpleicons.org/github" },
       { name: "VS Code", url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
       { name: "Figma", url: "https://cdn.simpleicons.org/figma" },
-      { name: "Tailwind CSS", url: "https://cdn.simpleicons.org/tailwindcss" }
+      { name: "Tailwind CSS", url: "https://cdn.simpleicons.org/tailwindcss" },
+      { name: "Google Analytics", url: "https://cdn.simpleicons.org/googleanalytics" },
+      { name: "Notion", url: "https://cdn.simpleicons.org/notion" },
+      { name: "Slack", url: "https://cdn.simpleicons.org/slack" },
+      { name: "Stripe", url: "https://cdn.simpleicons.org/stripe" },
+      { name: "Shopify", url: "https://cdn.simpleicons.org/shopify" },
+      { name: "Business", html: '<div style="width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg, #10B981, #059669);display:flex;align-items:center;justify-content:center;color:#fff;font-family:sans-serif;font-weight:900;font-size:13px;box-shadow:0 3px 10px rgba(16,185,129,0.4);">BIZ</div>' },
+      { name: "Mgmt", html: '<div style="width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg, #3B82F6, #1D4ED8);display:flex;align-items:center;justify-content:center;color:#fff;font-family:sans-serif;font-weight:900;font-size:12px;box-shadow:0 3px 10px rgba(59,130,246,0.4);">MGMT</div>' }
     ];
 
     const isMobile = window.innerWidth < 600;
