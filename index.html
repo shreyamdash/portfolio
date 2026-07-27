@@ -494,11 +494,22 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
           mask-image: radial-gradient(ellipse 55% 65% at 50% 45%, black 40%, transparent 75%);
 }
 @media (max-width: 768px) {
-  .hero-photo { width: 95vw; }
-  .hero-title-wrap { margin-top: 6rem; }
+  .hero-photo { width: 92vw; top: 54%; }
+  .hero-title-wrap { margin-top: 4.5rem; }
+  .hero h1, .text-pressure-title {
+    font-size: clamp(2.4rem, 12vw, 4.2rem) !important;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
 }
 @media (max-width: 500px) {
-  .hero-photo { width: 100vw; top: 60%; }
+  .hero-photo { width: 95vw; top: 56%; }
+  .hero-title-wrap { margin-top: 3.5rem; }
+  .hero h1, .text-pressure-title {
+    font-size: clamp(2.0rem, 10.5vw, 3.2rem) !important;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
 }
 
 
@@ -689,7 +700,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
   perspective: 500px;
   transform: translate3d(0, 0, 0.1px);
   position: relative;
-  touch-action: none;
+  touch-action: pan-y;
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
@@ -1317,7 +1328,8 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
   .project-card:nth-child(n) { grid-column: span 6; }
 }
 @media (max-width: 768px) {
-  .project-card:nth-child(n) { grid-column: span 12; min-height: 250px; }
+  .project-grid { display: flex; flex-direction: column; gap: 1.6rem; }
+  .project-card:nth-child(n) { width: 100%; min-height: 220px; height: auto; grid-column: auto; margin: 0; }
 }
 .project-card .pnum { position: absolute; top: 1.5rem; left: 1.6rem; font-family: var(--font-body); font-weight: 600; font-size: 0.85rem; opacity: 0.55; z-index: 3; }
 .project-card h3 {
@@ -2704,8 +2716,8 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
         stagger: 0.1,
         scrollTrigger: {
           trigger: '.project-grid',
-          start: 'top 80%',
-          toggleActions: "play reverse play reverse"
+          start: 'top 85%',
+          once: true
         }
       });
     }
@@ -3413,6 +3425,7 @@ a, button, input, textarea, [role="button"], [role="listbox"], [role="option"], 
     });
 
     shell.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch') return;
       const { x, y } = getOffsets(event, shell);
       setTarget(x, y);
     });
