@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1f"/>
+      <stop offset="100%" stop-color="#0a0a0d"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7B00"/>
+      <stop offset="100%" stop-color="#C85A2D"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Dark Circular Badge with Brand Orange Border -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)" stroke="url(#orangeGrad)" stroke-width="18"/>
+  <!-- Inner Ring Accent -->
+  <circle cx="256" cy="256" r="216" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+  <!-- SD Monogram -->
+  <text x="256" y="325" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="210" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="-8">S<tspan fill="url(#orangeGrad)">D</tspan></text>
+</svg>
