@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio-smoky-phi-25.vercel.app/sitemap.xml
+Sitemap: https://shreyamdash.github.io/portfolio/sitemap.xml
